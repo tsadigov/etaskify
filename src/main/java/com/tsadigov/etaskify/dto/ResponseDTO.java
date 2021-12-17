@@ -1,4 +1,4 @@
-package com.tsadigov.etaskify.Dto;
+package com.tsadigov.etaskify.dto;
 
 import lombok.*;
 

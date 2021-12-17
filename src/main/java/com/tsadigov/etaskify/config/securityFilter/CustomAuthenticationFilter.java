@@ -3,9 +3,10 @@ package com.tsadigov.etaskify.config.securityFilter;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tsadigov.etaskify.Dto.LoginDTO;
-import com.tsadigov.etaskify.Dto.ResponseDTO;
+import com.tsadigov.etaskify.dto.LoginDTO;
+import com.tsadigov.etaskify.dto.ResponseDTO;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,6 +25,7 @@ import java.util.stream.Collectors;
 
 import static com.tsadigov.etaskify.config.Constants.*;
 
+@Slf4j
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
@@ -36,11 +38,10 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     @SneakyThrows
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
 
-
         String username = "";
         String password = "";
         String requestData = request.getReader().lines().collect(Collectors.joining());
-        System.out.println("REQUEST DATA: "+requestData);
+
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             LoginDTO loginDTO = objectMapper.readValue(requestData, LoginDTO.class);
@@ -48,7 +49,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
             password = loginDTO.getPassword();
         }
         catch (Exception e){
-            System.out.println(e.getMessage());
+            log.info("Error while logging in: ",e.getMessage());
         }
 
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username,password);

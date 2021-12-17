@@ -1,7 +1,7 @@
 package com.tsadigov.etaskify.controller;
 
-import com.tsadigov.etaskify.Dto.ResponseDTO;
-import com.tsadigov.etaskify.Dto.SignUpDTO;
+import com.tsadigov.etaskify.dto.ResponseDTO;
+import com.tsadigov.etaskify.dto.SignUpDTO;
 import com.tsadigov.etaskify.domain.Organization;
 import com.tsadigov.etaskify.service.OrganizationService;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,8 @@ public class OrganizationController {
     private final OrganizationService organizationService;
 
     @GetMapping
-    ResponseEntity<ResponseDTO> getAll(){
+    ResponseEntity<ResponseDTO> getAll() {
+
         List<Organization> organizations = organizationService.getAll();
         ResponseDTO responseDTO = ResponseDTO.builder()
                 .code(SUCCESS_CODE)
@@ -34,21 +35,28 @@ public class OrganizationController {
     }
 
     @GetMapping("/{id}")
-    Optional<Organization> getOne(@PathVariable Long id){
+    ResponseEntity<ResponseDTO> getOne(@PathVariable Long id) {
+
         Optional<Organization> organization = organizationService.getOne(id);
-        return organization;
+        ResponseDTO responseDTO = ResponseDTO.builder()
+                .code(SUCCESS_CODE)
+                .message(SUCCESS)
+                .response(organization)
+                .build();
+
+        return ResponseEntity.ok(responseDTO);
     }
 
     @PostMapping
-    ResponseEntity<ResponseDTO>createOrganization(@RequestBody SignUpDTO signUpDTO){
+    ResponseEntity<ResponseDTO> createOrganization(@RequestBody SignUpDTO signUpDTO) {
 
 //        System.out.println("SIGNUP DTO -------- "+signUpDTO);
-        organizationService.signUp(signUpDTO);
+        Organization organization = organizationService.signUp(signUpDTO);
 
         ResponseDTO responseDTO = ResponseDTO.builder()
-                .code(200)
-                .message("Organization created")
-                .response(SUCCESS)
+                .code(SUCCESS_CODE)
+                .message(SUCCESS)
+                .response(organization)
                 .build();
 
         return ResponseEntity.ok()

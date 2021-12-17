@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AppUserDetails {
+public class Employee {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

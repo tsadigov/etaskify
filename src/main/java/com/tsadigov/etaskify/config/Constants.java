@@ -2,7 +2,6 @@ package com.tsadigov.etaskify.config;
 
 public class Constants {
 
-    public static final String MASTER_ASSIGNED_ERROR = "Master already assigned to a business!";
     public static final String BAD_CREDENTIALS = "Bad credentials";
     public static final String TOKEN_CREATED = "Token created";
 
@@ -20,11 +19,7 @@ public class Constants {
     public static final int NOT_FOUND_CODE = 404;
     public static final int RELATED_RECORD_EXISTS_CODE = 409;
     public static final int INTERNAL_SERVER_ERROR_CODE = 500;
-    public static final int PAGEABLE_DEFAULT_SIZE = 5;
-    public static final String PAGEABLE_DEFAULT_FIELD = "id";
     public static final String NOT_FOUND_MESSAGE = "Not found";
-    public static final String USER_ADMIN = "Admin";
-    public static final String USER_ADMIN_PASSWORD = "P@ssw0rd123!";
     public static final String TOKEN_BEARER = "Bearer ";
     public static final String SECRET_KEY = "secret_key";
     public static final String[] AUTH_WHITELIST = {
@@ -54,20 +49,19 @@ public class Constants {
     /**
      * Error Messages
      */
-    public static final String SHOULD_NOT_BE_LESS_THAN_8_CHARACTER = "Should not be less than 8 character!";
-    public static final String INVALID_MOBILE = "Mobile is not valid!";
+    public static final String SHOULD_NOT_BE_LESS_THAN_6_CHARACTER = "Should not be less than 6 character!";
     public static final String USER_NOT_FOUND = "User does not exist!";
     public static final String ALREADY_EXISTS = "Account already exists!";
-    public static final String FILE_DIRECTORY_ERROR_MESSAGE = "Could not create the directory where the uploaded files will be stored!";
-    public static final String INVALID_MONTH = "Month is not valid!";
-    public static final String RELATED_RECORD_EXISTS_MESSAGE = "Related records found during process!";
-
 
     /**
-     * Validation patterns
+     * Role Names
      */
-    public static final String MOBILE_PATTERN = "^994(?:50|51|55|70|77|99)[2-9][0-9]{6}";
-    public static final String MONTH_PATTERN = "^([1-9]|1[012])$";
+    public static final String ROLE_ADMIN = "ROLE_ADMIN";
+    public static final String ROLE_EMPLOYEE = "ROLE_EMPLOYEE";
 
+    /**
+     * Regex Patterns
+     */
+    public static final String EMAIL_PATTERN = "^(.+)@(\\S+)$";
 
 }

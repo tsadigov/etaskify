@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
-import static com.tsadigov.etaskify.config.Constants.SUCCESS;
-import static com.tsadigov.etaskify.config.Constants.SUCCESS_CODE;
+import static com.tsadigov.etaskify.bootstap.Constants.SUCCESS;
+import static com.tsadigov.etaskify.bootstap.Constants.SUCCESS_CODE;
 
 @RestController
 @RequestMapping("/api/user")

@@ -4,10 +4,10 @@ import com.tsadigov.etaskify.dto.UserDTO;
 import com.tsadigov.etaskify.domain.AppUser;
 import com.tsadigov.etaskify.domain.Employee;
 import com.tsadigov.etaskify.domain.Role;
+import com.tsadigov.etaskify.exception.ResourceNotFoundException;
 import com.tsadigov.etaskify.repository.EmployeeRepo;
 import com.tsadigov.etaskify.repository.RoleRepo;
 import com.tsadigov.etaskify.repository.AppUserRepo;
-import com.tsadigov.etaskify.validator.StringValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -24,7 +24,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-import static com.tsadigov.etaskify.config.Constants.SHOULD_NOT_BE_LESS_THAN_6_CHARACTER;
+import static com.tsadigov.etaskify.bootstap.Constants.USER_NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor
@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         AppUser user = new AppUser(
                 null, username, passwordEncoder.encode(userDTO.getPassword()), new ArrayList<>());
         userRepo.save(user);
-        log.info("Created user {}",userDTO);
+        log.info("Created user {}", userDTO);
 
         Role role = roleRepo.findRoleByRoleName("ROLE_EMPLOYEE");
         user.getRoles().add(role);
@@ -63,7 +63,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         AppUser user = userRepo.findByUsername(username);
         if (user == null) {
             log.info("User not found in the database");
-            throw new UsernameNotFoundException("User not found in the database");
+            throw new ResourceNotFoundException(USER_NOT_FOUND);
         } else {
             log.info("User found in the database");
         }
@@ -95,14 +95,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public AppUser saveUser(AppUser user) {
         log.info("Saving new USER {} to the DB", user.getUsername());
 
-        String password = user.getPassword();
-        if (StringValidator.isValidPasswordFormat(password)) {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            return userRepo.save(user);
-        }
-        else{
-            throw new RuntimeException(SHOULD_NOT_BE_LESS_THAN_6_CHARACTER);
-        }
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return userRepo.save(user);
     }
 
     @Override

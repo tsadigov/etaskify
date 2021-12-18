@@ -34,9 +34,7 @@ public class TaskStatusController {
 
     @PostMapping
     void create(@RequestBody TaskStatusDTO taskStatusDTO){
-        TaskStatus taskStatus = new TaskStatus();
-        mapper.toModel(taskStatus,taskStatusDTO);
-        statusServiceImpl.createTaskStatus(taskStatus);
+        statusServiceImpl.createTaskStatus(taskStatusDTO);
     }
 
 }

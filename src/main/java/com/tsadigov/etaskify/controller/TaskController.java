@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static com.tsadigov.etaskify.config.Constants.*;
+import static com.tsadigov.etaskify.bootstap.Constants.*;
 
 @RestController
 @RequestMapping("/api/task")

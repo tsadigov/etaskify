@@ -1,4 +1,4 @@
-package com.tsadigov.etaskify.config;
+package com.tsadigov.etaskify.bootstap;
 
 public class Constants {
 
@@ -38,13 +38,10 @@ public class Constants {
     };
     public static final String ROLES = "roles";
     public static final String ACCESS_TOKEN = "access_token";
-    public static final String ROOT_ACCESS_TOKEN = "root_access_token";
     public static final String REFRESH_TOKEN = "refresh_token";
-    public static final String ROOT_REFRESH_TOKEN = "root_refresh_token";
     public static final String REFRESH_TOKEN_IS_MISSING = "Refresh token is missing";
     public static final int REFRESH_TOKEN_DURATION = 30 * 60 * 60 * 1000;
     public static final int ACCESS_TOKEN_DURATION = 10 * 60 * 60 * 1000;
-    public static final int ROOT_ACCESS_TOKEN_DURATION = 30 * 60 * 60 * 1000;
 
     /**
      * Error Messages
@@ -52,6 +49,8 @@ public class Constants {
     public static final String SHOULD_NOT_BE_LESS_THAN_6_CHARACTER = "Should not be less than 6 character!";
     public static final String USER_NOT_FOUND = "User does not exist!";
     public static final String ALREADY_EXISTS = "Account already exists!";
+    public static final String WRONG_PASSWORD_FORMAT = "Wrong password format!";
+    public static final String WRONG_EMAIL_FORMAT = "Wrong email format!";
 
     /**
      * Role Names

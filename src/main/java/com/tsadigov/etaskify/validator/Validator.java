@@ -1,13 +1,16 @@
 package com.tsadigov.etaskify.validator;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import com.tsadigov.etaskify.repository.EmployeeRepo;
+import lombok.RequiredArgsConstructor;
+
 import java.util.regex.Pattern;
 
-import static com.tsadigov.etaskify.config.Constants.EMAIL_PATTERN;
+import static com.tsadigov.etaskify.bootstap.Constants.EMAIL_PATTERN;
 
-public class StringValidator {
+@RequiredArgsConstructor
+public class Validator {
+
+//    private final EmployeeRepo employeeRepo;
 
     public static boolean isAlphaNumeric(String data) {
 
@@ -33,5 +36,11 @@ public class StringValidator {
                 .matcher(email)
                 .matches();
     }
+
+//    public static boolean checkEmailExist(String email){
+//
+//        if(!)
+//        return false;
+//    }
 
 }

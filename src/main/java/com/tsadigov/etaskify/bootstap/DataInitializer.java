@@ -6,7 +6,6 @@ import com.tsadigov.etaskify.domain.TaskStatus;
 import com.tsadigov.etaskify.repository.OrganizationRepo;
 import com.tsadigov.etaskify.repository.TaskStatusRepo;
 import com.tsadigov.etaskify.service.RoleService;
-import com.tsadigov.etaskify.service.TaskService;
 import com.tsadigov.etaskify.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,8 +14,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 
-import static com.tsadigov.etaskify.config.Constants.ROLE_ADMIN;
-import static com.tsadigov.etaskify.config.Constants.ROLE_EMPLOYEE;
+import static com.tsadigov.etaskify.bootstap.Constants.ROLE_ADMIN;
+import static com.tsadigov.etaskify.bootstap.Constants.ROLE_EMPLOYEE;
 
 @Component
 @RequiredArgsConstructor

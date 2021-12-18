@@ -11,8 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
-import static com.tsadigov.etaskify.config.Constants.SUCCESS;
-import static com.tsadigov.etaskify.config.Constants.SUCCESS_CODE;
+import static com.tsadigov.etaskify.bootstap.Constants.*;
 
 @RestController
 @RequestMapping("/api/organization")
@@ -20,6 +19,19 @@ import static com.tsadigov.etaskify.config.Constants.SUCCESS_CODE;
 public class OrganizationController {
 
     private final OrganizationService organizationService;
+
+    @GetMapping("/{id}")
+    ResponseEntity<ResponseDTO> getOne(@PathVariable Long id) {
+
+        Organization organization = organizationService.getOne(id);
+        ResponseDTO responseDTO = ResponseDTO.builder()
+                .code(SUCCESS_CODE)
+                .message(SUCCESS)
+                .response(organization)
+                .build();
+
+        return ResponseEntity.ok(responseDTO);
+    }
 
     @GetMapping
     ResponseEntity<ResponseDTO> getAll() {
@@ -34,28 +46,14 @@ public class OrganizationController {
         return ResponseEntity.ok(responseDTO);
     }
 
-    @GetMapping("/{id}")
-    ResponseEntity<ResponseDTO> getOne(@PathVariable Long id) {
-
-        Optional<Organization> organization = organizationService.getOne(id);
-        ResponseDTO responseDTO = ResponseDTO.builder()
-                .code(SUCCESS_CODE)
-                .message(SUCCESS)
-                .response(organization)
-                .build();
-
-        return ResponseEntity.ok(responseDTO);
-    }
-
     @PostMapping
     ResponseEntity<ResponseDTO> createOrganization(@RequestBody SignUpDTO signUpDTO) {
 
-//        System.out.println("SIGNUP DTO -------- "+signUpDTO);
         Organization organization = organizationService.signUp(signUpDTO);
 
         ResponseDTO responseDTO = ResponseDTO.builder()
-                .code(SUCCESS_CODE)
-                .message(SUCCESS)
+                .code(CREATED_CODE)
+                .message(CREATED)
                 .response(organization)
                 .build();
 

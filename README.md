@@ -4,12 +4,12 @@ ABB Coding Task
 
 # Requirements to run project
 1. Java 17
-2. MySql installed on your local computer
+2. (Optional)MySql installed on your local computer (H2 is configured in project)
 3. Postman
 
 # Instructions
-1. Create SCHEMA named "abb_etaskify" in MySQL using WORKBENCH
-2. Edit username and password in application.properties file to create connection to database
+1. (Optional)Create SCHEMA named "abb_etaskify" in MySQL using WORKBENCH
+2. (Optional)Edit username and password in application.properties file to create connection to database
 3. Run ETaskifyApplication.java file to run project
 4. Swagger is configured so open "http://localhost:8080/swagger-ui/index.html"
 

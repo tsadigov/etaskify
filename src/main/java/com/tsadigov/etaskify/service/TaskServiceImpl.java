@@ -1,12 +1,9 @@
 package com.tsadigov.etaskify.service;
 
-import com.tsadigov.etaskify.config.MapperConfig;
 import com.tsadigov.etaskify.domain.AppUser;
 import com.tsadigov.etaskify.domain.Task;
-import com.tsadigov.etaskify.domain.TaskStatus;
 import com.tsadigov.etaskify.dto.TaskDTO;
 import com.tsadigov.etaskify.repository.AppUserRepo;
-import com.tsadigov.etaskify.repository.RoleRepo;
 import com.tsadigov.etaskify.repository.TaskRepo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +20,6 @@ public class TaskServiceImpl implements TaskService {
 
     private final TaskRepo taskRepo;
     private final AppUserRepo userRepo;
-    private final MapperConfig mapperConfig;
 
 
     @Override

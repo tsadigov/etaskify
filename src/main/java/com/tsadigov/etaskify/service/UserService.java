@@ -20,12 +20,14 @@ public interface UserService {
 
     AppUser findByUsername(String username);
 
-    List<AppUser> getUsers();
+    List<UserDTO> getUsers();
 
     void addRoleToUser(String username, String roleName);
 
     Employee createUser(UserCreationDTO userCreationDTO);
 
     void signUp(SignUpDTO signUpDTO);
+
+    String getUserEmailByUsername(String username);
 
 }

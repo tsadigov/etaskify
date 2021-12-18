@@ -1,6 +1,6 @@
 package com.tsadigov.etaskify.service;
 
-import com.tsadigov.etaskify.config.MapperConfig;
+import com.tsadigov.etaskify.config.Mapper;
 import com.tsadigov.etaskify.domain.Organization;
 import com.tsadigov.etaskify.dto.SignUpDTO;
 import com.tsadigov.etaskify.dto.UserCreationDTO;
@@ -44,7 +44,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final PasswordEncoder passwordEncoder;
     private final EmployeeRepo employeeRepo;
     private final OrganizationRepo organizationRepo;
-    private final MapperConfig mapper;
 
     @Override
     @Transactional
@@ -53,7 +52,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         String username = userCreationDTO.getEmail().split("@")[0];
 
         AppUser user = new AppUser(
-                null, username, passwordEncoder.encode(userCreationDTO.getPassword()), new ArrayList<>(),null);
+                null, username, passwordEncoder.encode(userCreationDTO.getPassword()), new ArrayList<>(), null);
         userRepo.save(user);
         log.info("Created user {}", userCreationDTO);
 
@@ -90,7 +89,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
         // get admin role
         Role role = roleRepo.findRoleByRoleName(ROLE_ADMIN);
-        addRoleToUser(user.getUsername(),role.getRoleName());
+        addRoleToUser(user.getUsername(), role.getRoleName());
 
 
         // save employee
@@ -98,6 +97,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         employee.setEmail(signUpDTO.getEmail());
         employee.setUserFk(user);
         employeeRepo.save(employee);
+    }
+
+    @Override
+    public String getUserEmailByUsername(String username) {
+        AppUser user = findByUsername(username);
+        Employee employee = employeeRepo.getById(user.getId());
+        String email = employee.getEmail();
+        return email;
     }
 
     @Override
@@ -126,15 +133,17 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public UserDTO getUser(Long id) {
         Optional<AppUser> user = userRepo.findById(id);
         log.info("Fetching user {}", user.get().getUsername());
-        UserDTO userDTO = new UserDTO();
-        mapper.mapper().map(user.get(), userDTO);
+        UserDTO userDTO = Mapper.map(user.get(), UserDTO.class);
         return userDTO;
     }
 
     @Override
-    public List<AppUser> getUsers() {
+    public List<UserDTO> getUsers() {
         log.info("Fetching all users");
-        return userRepo.findAll();
+        List<AppUser> users = userRepo.findAll();
+        List<UserDTO> userDTOS = Mapper.mapAll(users, UserDTO.class);
+
+        return userDTOS;
     }
 
     @Override

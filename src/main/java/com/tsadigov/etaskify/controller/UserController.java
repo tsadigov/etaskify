@@ -3,7 +3,6 @@ package com.tsadigov.etaskify.controller;
 import com.tsadigov.etaskify.dto.ResponseDTO;
 import com.tsadigov.etaskify.dto.SignUpDTO;
 import com.tsadigov.etaskify.dto.UserCreationDTO;
-import com.tsadigov.etaskify.domain.AppUser;
 import com.tsadigov.etaskify.domain.Employee;
 import com.tsadigov.etaskify.dto.UserDTO;
 import com.tsadigov.etaskify.service.UserService;
@@ -12,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 import static com.tsadigov.etaskify.bootstap.Constants.*;
 import static com.tsadigov.etaskify.bootstap.Constants.CREATED;
@@ -69,7 +67,7 @@ public class UserController {
     @GetMapping
     ResponseEntity<ResponseDTO> getUsers() {
 
-        List<AppUser> users = userService.getUsers();
+        List<UserDTO> users = userService.getUsers();
 
         ResponseDTO responseDTO = ResponseDTO.builder()
                 .code(SUCCESS_CODE)

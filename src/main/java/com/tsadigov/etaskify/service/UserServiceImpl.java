@@ -1,11 +1,13 @@
 package com.tsadigov.etaskify.service;
 
+import com.tsadigov.etaskify.config.MapperConfig;
 import com.tsadigov.etaskify.domain.Organization;
 import com.tsadigov.etaskify.dto.SignUpDTO;
 import com.tsadigov.etaskify.dto.UserCreationDTO;
 import com.tsadigov.etaskify.domain.AppUser;
 import com.tsadigov.etaskify.domain.Employee;
 import com.tsadigov.etaskify.domain.Role;
+import com.tsadigov.etaskify.dto.UserDTO;
 import com.tsadigov.etaskify.exception.AlreadyExistException;
 import com.tsadigov.etaskify.exception.ResourceNotFoundException;
 import com.tsadigov.etaskify.repository.EmployeeRepo;
@@ -42,6 +44,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final PasswordEncoder passwordEncoder;
     private final EmployeeRepo employeeRepo;
     private final OrganizationRepo organizationRepo;
+    private final MapperConfig mapper;
 
     @Override
     @Transactional
@@ -120,8 +123,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public Optional<AppUser> getUser(Long id) {
-        return userRepo.findById(id);
+    public UserDTO getUser(Long id) {
+        Optional<AppUser> user = userRepo.findById(id);
+        log.info("Fetching user {}", user.get().getUsername());
+        UserDTO userDTO = new UserDTO();
+        mapper.mapper().map(user.get(), userDTO);
+        return userDTO;
     }
 
     @Override

@@ -1,5 +1,9 @@
 package com.tsadigov.etaskify.dto;
 
-public class UserDTO {
+import lombok.Data;
 
+@Data
+public class UserDTO {
+    private Long id;
+    private String username;
 }

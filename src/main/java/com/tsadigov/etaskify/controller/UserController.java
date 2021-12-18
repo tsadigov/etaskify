@@ -5,6 +5,7 @@ import com.tsadigov.etaskify.dto.SignUpDTO;
 import com.tsadigov.etaskify.dto.UserCreationDTO;
 import com.tsadigov.etaskify.domain.AppUser;
 import com.tsadigov.etaskify.domain.Employee;
+import com.tsadigov.etaskify.dto.UserDTO;
 import com.tsadigov.etaskify.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -54,7 +55,7 @@ public class UserController {
     @GetMapping("/{id}")
     ResponseEntity<ResponseDTO> getUser(@PathVariable Long id) {
 
-        Optional<AppUser> user = userService.getUser(id);
+        UserDTO user = userService.getUser(id);
 
         ResponseDTO responseDTO = ResponseDTO.builder()
                 .code(SUCCESS_CODE)

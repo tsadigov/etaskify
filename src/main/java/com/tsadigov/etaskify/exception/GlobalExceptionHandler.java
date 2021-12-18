@@ -4,10 +4,8 @@ import com.tsadigov.etaskify.dto.ResponseDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.context.request.WebRequest;
 
 import static com.tsadigov.etaskify.bootstap.Constants.*;
 
@@ -15,7 +13,7 @@ import static com.tsadigov.etaskify.bootstap.Constants.*;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ResponseDTO> notFoundExceptionHandling(ResourceNotFoundException exception, WebRequest request) {
+    public ResponseEntity<ResponseDTO> notFoundExceptionHandling(ResourceNotFoundException exception) {
 
         ResponseDTO responseDTO = ResponseDTO.builder()
                 .code(NOT_FOUND_CODE)
@@ -26,24 +24,12 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<ResponseDTO> badCredentials(BadCredentialsException exception, WebRequest request) {
+    public ResponseEntity<ResponseDTO> badCredentials(BadCredentialsException exception) {
 
         ResponseDTO responseDTO = ResponseDTO.builder()
                 .code(UNAUTHORIZED_CODE)
                 .message(exception.getMessage())
                 .response(null).build();
-
-        return new ResponseEntity(responseDTO, HttpStatus.OK);
-    }
-
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ResponseDTO> phoneNumberValidationException(MethodArgumentNotValidException exception, WebRequest request) {
-
-        ResponseDTO responseDTO = ResponseDTO.builder()
-                .code(BAD_REQUEST_CODE)
-                .message(exception.getFieldError().getDefaultMessage())
-                .response(null)
-                .build();
 
         return new ResponseEntity(responseDTO, HttpStatus.OK);
     }

@@ -1,11 +1,15 @@
 package com.tsadigov.etaskify.service;
 
-import com.tsadigov.etaskify.dto.UserDTO;
+import com.tsadigov.etaskify.domain.Organization;
+import com.tsadigov.etaskify.dto.SignUpDTO;
+import com.tsadigov.etaskify.dto.UserCreationDTO;
 import com.tsadigov.etaskify.domain.AppUser;
 import com.tsadigov.etaskify.domain.Employee;
 import com.tsadigov.etaskify.domain.Role;
+import com.tsadigov.etaskify.exception.AlreadyExistException;
 import com.tsadigov.etaskify.exception.ResourceNotFoundException;
 import com.tsadigov.etaskify.repository.EmployeeRepo;
+import com.tsadigov.etaskify.repository.OrganizationRepo;
 import com.tsadigov.etaskify.repository.RoleRepo;
 import com.tsadigov.etaskify.repository.AppUserRepo;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +28,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-import static com.tsadigov.etaskify.bootstap.Constants.USER_NOT_FOUND;
+import static com.tsadigov.etaskify.bootstap.Constants.*;
 
 @Service
 @RequiredArgsConstructor
@@ -36,27 +40,62 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final EmployeeRepo userDetailsRepo;
     private final RoleRepo roleRepo;
     private final PasswordEncoder passwordEncoder;
+    private final EmployeeRepo employeeRepo;
+    private final OrganizationRepo organizationRepo;
 
     @Override
     @Transactional
-    public Employee createUser(UserDTO userDTO) {
+    public Employee createUser(UserCreationDTO userCreationDTO) {
 
-        String username = userDTO.getEmail().split("@")[0];
+        String username = userCreationDTO.getEmail().split("@")[0];
 
         AppUser user = new AppUser(
-                null, username, passwordEncoder.encode(userDTO.getPassword()), new ArrayList<>());
+                null, username, passwordEncoder.encode(userCreationDTO.getPassword()), new ArrayList<>(),null);
         userRepo.save(user);
-        log.info("Created user {}", userDTO);
+        log.info("Created user {}", userCreationDTO);
 
         Role role = roleRepo.findRoleByRoleName("ROLE_EMPLOYEE");
         user.getRoles().add(role);
 
-        Employee userDetails = new Employee(null, userDTO.getEmail(), userDTO.getName(), userDTO.getSurname(), user);
+        Employee userDetails = new Employee(null, userCreationDTO.getEmail(), userCreationDTO.getName(), userCreationDTO.getSurname(), user);
         userDetailsRepo.save(userDetails);
 
         return userDetails;
     }
 
+    @Override
+    @Transactional
+    public void signUp(SignUpDTO signUpDTO) {
+
+        if (findByUsername(signUpDTO.getUsername()) != null)
+            throw new AlreadyExistException(ALREADY_EXISTS);
+
+        // add organization
+        Organization organization = new Organization();
+        organization.setOrganizationName(signUpDTO.getOrganizationName());
+        organization.setPhoneNumber(signUpDTO.getPhoneNumber());
+        organization.setAddress(signUpDTO.getAddress());
+        organization.setStatus(true);
+        organizationRepo.save(organization);
+
+        // add admin user
+        AppUser user = new AppUser();
+        user.setUsername(signUpDTO.getUsername());
+        user.setPassword(passwordEncoder.encode(signUpDTO.getPassword()));
+        user.setOrganization(organization);
+        userRepo.save(user);
+
+        // get admin role
+        Role role = roleRepo.findRoleByRoleName(ROLE_ADMIN);
+        addRoleToUser(user.getUsername(),role.getRoleName());
+
+
+        // save employee
+        Employee employee = new Employee();
+        employee.setEmail(signUpDTO.getEmail());
+        employee.setUserFk(user);
+        employeeRepo.save(employee);
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -105,7 +144,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         AppUser user = userRepo.findByUsername(username);
         Role role = roleRepo.findRoleByRoleName(roleName);
 
-        user.getRoles().add(role);
+        List<Role> roles = new ArrayList<>();
+        roles.add(role);
+        user.setRoles(roles);
     }
 
     @Override

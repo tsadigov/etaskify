@@ -51,6 +51,7 @@ public class Constants {
     public static final String ALREADY_EXISTS = "Account already exists!";
     public static final String WRONG_PASSWORD_FORMAT = "Wrong password format!";
     public static final String WRONG_EMAIL_FORMAT = "Wrong email format!";
+    public static final String ROLE_NOT_FOUND = "Role not found!";
 
     /**
      * Role Names

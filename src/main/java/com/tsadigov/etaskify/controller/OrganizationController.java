@@ -46,19 +46,4 @@ public class OrganizationController {
         return ResponseEntity.ok(responseDTO);
     }
 
-    @PostMapping
-    ResponseEntity<ResponseDTO> createOrganization(@RequestBody SignUpDTO signUpDTO) {
-
-        Organization organization = organizationService.signUp(signUpDTO);
-
-        ResponseDTO responseDTO = ResponseDTO.builder()
-                .code(CREATED_CODE)
-                .message(CREATED)
-                .response(organization)
-                .build();
-
-        return ResponseEntity.ok()
-                .body(responseDTO);
-    }
-
 }

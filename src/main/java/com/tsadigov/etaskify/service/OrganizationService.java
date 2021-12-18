@@ -8,5 +8,4 @@ import java.util.List;
 public interface OrganizationService {
     Organization getOne(Long id);
     List<Organization> getAll();
-    Organization signUp(SignUpDTO signUpDTO);
 }

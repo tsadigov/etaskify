@@ -25,4 +25,7 @@ public class AppUser {
     @ManyToMany(cascade = CascadeType.ALL)
     private Collection<Role>roles;
 
+    @ManyToOne
+    private Organization organization;
+
 }

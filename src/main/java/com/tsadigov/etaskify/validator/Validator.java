@@ -1,6 +1,5 @@
 package com.tsadigov.etaskify.validator;
 
-import com.tsadigov.etaskify.repository.EmployeeRepo;
 import lombok.RequiredArgsConstructor;
 
 import java.util.regex.Pattern;
@@ -9,8 +8,6 @@ import static com.tsadigov.etaskify.bootstap.Constants.EMAIL_PATTERN;
 
 @RequiredArgsConstructor
 public class Validator {
-
-//    private final EmployeeRepo employeeRepo;
 
     public static boolean isAlphaNumeric(String data) {
 
@@ -36,11 +33,5 @@ public class Validator {
                 .matcher(email)
                 .matches();
     }
-
-//    public static boolean checkEmailExist(String email){
-//
-//        if(!)
-//        return false;
-//    }
 
 }

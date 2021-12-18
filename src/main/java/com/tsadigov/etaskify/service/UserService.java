@@ -1,7 +1,8 @@
 package com.tsadigov.etaskify.service;
 
 
-import com.tsadigov.etaskify.dto.UserDTO;
+import com.tsadigov.etaskify.dto.SignUpDTO;
+import com.tsadigov.etaskify.dto.UserCreationDTO;
 import com.tsadigov.etaskify.domain.AppUser;
 import com.tsadigov.etaskify.domain.Employee;
 
@@ -22,6 +23,8 @@ public interface UserService {
 
     void addRoleToUser(String username, String roleName);
 
-    Employee createUser(UserDTO userDTO);
+    Employee createUser(UserCreationDTO userCreationDTO);
+
+    void signUp(SignUpDTO signUpDTO);
 
 }

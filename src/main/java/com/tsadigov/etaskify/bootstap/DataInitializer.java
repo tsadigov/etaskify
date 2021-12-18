@@ -38,10 +38,10 @@ public class DataInitializer implements CommandLineRunner {
         roleService.saveRole(new Role(null, ROLE_EMPLOYEE));
         log.info("Added roles to db");
 
-        AppUser user = new AppUser(null, "john", "123Aaa", new ArrayList<>());
-        service.saveUser(user);
-        service.addRoleToUser("john",ROLE_ADMIN);
-        log.info("Created default admin user");
+//        AppUser user = new AppUser(null, "john", "123Aaa", new ArrayList<>(),null);
+//        service.saveUser(user);
+//        service.addRoleToUser("john",ROLE_ADMIN);
+//        log.info("Created default admin user");
 
         statusRepo.save(new TaskStatus(null,"assigned"));
         statusRepo.save(new TaskStatus(null,"in_progress"));

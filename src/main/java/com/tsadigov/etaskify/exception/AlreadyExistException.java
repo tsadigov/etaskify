@@ -1,6 +1,6 @@
 package com.tsadigov.etaskify.exception;
 
-public class AlreadyExistException extends Throwable {
+public class AlreadyExistException extends RuntimeException {
     public AlreadyExistException(String message) {
         super(message);
     }

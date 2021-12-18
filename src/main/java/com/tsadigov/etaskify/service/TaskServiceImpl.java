@@ -83,7 +83,7 @@ public class TaskServiceImpl implements TaskService {
         usernames.stream().forEach(username -> {
             AppUser user = userRepo.findByUsername(username);
             users.add(user);
-            System.out.println("User email: " + userServiceImpl.getUserEmailByUsername(username));
+//            System.out.println("User email: " + userServiceImpl.getUserEmailByUsername(username));
         });
         task.setUsers(users);
     }

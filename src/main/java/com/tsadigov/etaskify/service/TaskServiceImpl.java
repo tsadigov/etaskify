@@ -14,9 +14,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -34,8 +33,10 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<Task> getTasks() {
-        return taskRepo.findAll();
+    public List<TaskDTO> getTasks() {
+        List<Task> taskList = taskRepo.findAll();
+        List<TaskDTO> taskDTOList = Mapper.mapAll(taskList, TaskDTO.class);
+        return taskDTOList;
     }
 
     @Override
@@ -86,6 +87,14 @@ public class TaskServiceImpl implements TaskService {
 //            System.out.println("User email: " + userServiceImpl.getUserEmailByUsername(username));
         });
         task.setUsers(users);
+    }
+
+    private List<String> getUsernamesByUserList(Collection<AppUser> users){
+        List<String> usernames = new ArrayList<>();
+
+        users.stream().map(appUser -> usernames.add(appUser.getUsername())).collect(Collectors.toList());
+
+        return usernames;
     }
 
 }

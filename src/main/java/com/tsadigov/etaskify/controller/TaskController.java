@@ -23,7 +23,7 @@ public class TaskController {
     @GetMapping
     public ResponseEntity<ResponseDTO> getAllTasks(){
 
-        List<Task> taskList = taskService.getTasks();
+        List<TaskDTO> taskList = taskService.getTasks();
 
         ResponseDTO responseDTO = ResponseDTO.builder()
                 .code(SUCCESS_CODE)

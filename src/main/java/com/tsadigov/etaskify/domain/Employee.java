@@ -16,9 +16,11 @@ public class Employee {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String email;
+
     private String name;
+
     private String surname;
 
     @OneToOne(cascade = CascadeType.ALL)

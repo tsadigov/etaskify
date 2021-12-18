@@ -1,10 +1,15 @@
 package com.tsadigov.etaskify.service;
 
+import com.tsadigov.etaskify.config.Mapper;
 import com.tsadigov.etaskify.domain.AppUser;
 import com.tsadigov.etaskify.domain.Task;
+import com.tsadigov.etaskify.domain.TaskStatus;
+import com.tsadigov.etaskify.dto.TaskCreateDTO;
 import com.tsadigov.etaskify.dto.TaskDTO;
+import com.tsadigov.etaskify.exception.ResourceNotFoundException;
 import com.tsadigov.etaskify.repository.AppUserRepo;
 import com.tsadigov.etaskify.repository.TaskRepo;
+import com.tsadigov.etaskify.repository.TaskStatusRepo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,7 +25,8 @@ public class TaskServiceImpl implements TaskService {
 
     private final TaskRepo taskRepo;
     private final AppUserRepo userRepo;
-
+    private final TaskStatusRepo taskStatusRepo;
+    private final UserServiceImpl userServiceImpl;
 
     @Override
     public Optional<Task> getTask(Long id) {
@@ -33,23 +39,31 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Task create(TaskDTO taskDTO) {
+    public TaskDTO create(TaskCreateDTO taskCreateDTO) {
 
-        Task task = new Task(null, taskDTO.getTitle(), taskDTO.getDescription(), taskDTO.getDeadline(), taskDTO.getStatus(), new ArrayList<>());
-        System.out.println("----------------TASK" + task);
+        Task task = new Task();
+        TaskStatus taskStatus;
 
-        List<String> usernames = taskDTO.getUsernames();
-        usernames.stream().forEach(username -> {
-            AppUser user = userRepo.findByUsername(username);
-            task.getUsers().add(user);
-        });
-        log.info("Assigned task to user(s): {}",usernames);
+        try {
+            taskStatus = taskStatusRepo.findTaskStatusByName(taskCreateDTO.getStatus());
+        } catch (Exception ex) {
+            throw new ResourceNotFoundException("Status " + taskCreateDTO.getStatus() + " not found");
+        }
 
-//        TaskStatus
+        task.setStatus(taskStatus);
+        task.setTitle(taskCreateDTO.getTitle());
+        task.setDeadline(taskCreateDTO.getDeadline());
+        task.setDescription(taskCreateDTO.getDescription());
+
+        List<String> usernames = taskCreateDTO.getUsernames();
+        addUsersToTask(task, usernames);
+        log.info("Assigned task to user(s): {}", usernames);
 
         taskRepo.save(task);
 
-        return task;
+        TaskDTO taskDTO = Mapper.map(task, TaskDTO.class);
+
+        return taskDTO;
     }
 
     @Override
@@ -61,4 +75,17 @@ public class TaskServiceImpl implements TaskService {
     public void updateStatus(String status) {
 
     }
+
+    public void addUsersToTask(Task task, List<String> usernames) {
+
+        List<AppUser> users = new ArrayList<>();
+
+        usernames.stream().forEach(username -> {
+            AppUser user = userRepo.findByUsername(username);
+            users.add(user);
+            System.out.println("User email: " + userServiceImpl.getUserEmailByUsername(username));
+        });
+        task.setUsers(users);
+    }
+
 }

@@ -16,7 +16,9 @@ import com.tsadigov.etaskify.repository.RoleRepo;
 import com.tsadigov.etaskify.repository.AppUserRepo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -39,7 +41,6 @@ import static com.tsadigov.etaskify.bootstap.Constants.*;
 public class UserServiceImpl implements UserService, UserDetailsService {
 
     private final AppUserRepo userRepo;
-    private final EmployeeRepo userDetailsRepo;
     private final RoleRepo roleRepo;
     private final PasswordEncoder passwordEncoder;
     private final EmployeeRepo employeeRepo;
@@ -49,20 +50,23 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Transactional
     public Employee createUser(UserCreationDTO userCreationDTO) {
 
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Organization organization = userRepo.findByUsername(auth.getPrincipal().toString()).getOrganization();
+
         String username = userCreationDTO.getEmail().split("@")[0];
 
         AppUser user = new AppUser(
-                null, username, passwordEncoder.encode(userCreationDTO.getPassword()), new ArrayList<>(), null);
+                null, username, passwordEncoder.encode(userCreationDTO.getPassword()), new ArrayList<>(), organization);
         userRepo.save(user);
         log.info("Created user {}", userCreationDTO);
 
         Role role = roleRepo.findRoleByRoleName("ROLE_EMPLOYEE");
         user.getRoles().add(role);
 
-        Employee userDetails = new Employee(null, userCreationDTO.getEmail(), userCreationDTO.getName(), userCreationDTO.getSurname(), user);
-        userDetailsRepo.save(userDetails);
+        Employee employee = new Employee(null, userCreationDTO.getEmail(), userCreationDTO.getName(), userCreationDTO.getSurname(), user);
+        employeeRepo.save(employee);
 
-        return userDetails;
+        return employee;
     }
 
     @Override
@@ -101,9 +105,16 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public String getUserEmailByUsername(String username) {
-        AppUser user = findByUsername(username);
-        Employee employee = employeeRepo.getById(user.getId());
-        String email = employee.getEmail();
+        String email;
+        try{
+            AppUser user = findByUsername(username);
+            Employee employee = employeeRepo.getById(user.getId());
+            email = employee.getEmail();
+        }
+        catch (Exception ex){
+            log.info("Username {} not found in db", username);
+            throw new ResourceNotFoundException(username+" : "+USER_NOT_FOUND);
+        }
         return email;
     }
 

@@ -2,6 +2,7 @@ package com.tsadigov.etaskify.controller;
 
 import com.tsadigov.etaskify.domain.Task;
 import com.tsadigov.etaskify.dto.ResponseDTO;
+import com.tsadigov.etaskify.dto.TaskCreateDTO;
 import com.tsadigov.etaskify.dto.TaskDTO;
 import com.tsadigov.etaskify.service.TaskService;
 import lombok.RequiredArgsConstructor;
@@ -34,14 +35,14 @@ public class TaskController {
     }
 
     @PostMapping
-    public ResponseEntity<ResponseDTO> createTask(@RequestBody TaskDTO taskDTO){
+    public ResponseEntity<ResponseDTO> createTask(@RequestBody TaskCreateDTO taskCreateDTO){
 
-        Task task = taskService.create(taskDTO);
+        TaskDTO taskDTO = taskService.create(taskCreateDTO);
 
         ResponseDTO responseDTO = ResponseDTO.builder()
                 .code(SUCCESS_CODE)
                 .message(SUCCESS)
-                .response(task)
+                .response(taskDTO)
                 .build();
 
         return ResponseEntity.ok(responseDTO);

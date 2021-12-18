@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 import static com.tsadigov.etaskify.bootstap.Constants.*;
-import static com.tsadigov.etaskify.bootstap.Constants.CREATED;
 
 @RestController
 @RequestMapping("/api/user")
@@ -28,8 +27,8 @@ public class UserController {
         Employee employee = userService.createUser(userCreationDTO);
 
         ResponseDTO responseDTO = ResponseDTO.builder()
-                .code(SUCCESS_CODE)
-                .message(SUCCESS)
+                .code(CREATED_CODE)
+                .message(CREATED)
                 .response(employee)
                 .build();
 
